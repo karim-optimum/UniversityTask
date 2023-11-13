@@ -12,8 +12,9 @@ namespace EntityLayer.Entities
         public string? Email { get; set; }
         public string? Password { get; set; }
         public UserTypeEnum UserType { get; set; }
-        public int UniversityId { get; set; }
-        public ICollection<UserCourse> UserCourses { get; set; }
+        public ICollection<StudentCourse> StudentCourses { get; set; }
+        public ICollection<TeacherCourse> TeacherCourses { get; set; }
         public University University { get; set; }
+        public int UniversityId { get; set; }
     }
 }

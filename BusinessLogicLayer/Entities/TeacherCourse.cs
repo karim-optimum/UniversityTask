@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace EntityLayer.Entities
 {
-    public class UserCourse
+    public class TeacherCourse : EntityBase
     {
-        public int UserId { get; set; }
-        public User User { get; set; }
+        public User Teacher { get; set; }
+        public int TeacherId { get; set; }
 
-        public int CourseId { get; set; }
         public Course Course { get; set; }
+        public int CourseId { get; set; }
     }
 }

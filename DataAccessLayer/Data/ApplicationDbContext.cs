@@ -12,30 +12,25 @@ namespace DataAccessLayer.Data
         public DbSet<User> Users { get; set; }
         public DbSet<Course> Courses { get; set; }
     
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
-    {
-        modelBuilder.Entity<UserCourse>()
-            .HasKey(uc => new { uc.UserId, uc.CourseId });
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<StudentCourse>()
+                .HasKey(uc => new { uc.StudentId, uc.CourseId });
 
-        modelBuilder.Entity<UserCourse>()
-            .HasOne(uc => uc.User)
-            .WithMany(u => u.UserCourses)
-            .HasForeignKey(uc => uc.UserId);
+            modelBuilder.Entity<StudentCourse>()
+                .HasOne(uc => uc.Student)
+                .WithMany(u => u.StudentCourses)
+                .HasForeignKey(uc => uc.StudentId);
 
-        modelBuilder.Entity<UserCourse>()
-            .HasOne(uc => uc.Course)
-            .WithMany(c => c.UserCourses)
-            .HasForeignKey(uc => uc.CourseId);
+            modelBuilder.Entity<TeacherCourse>()
+                .HasOne(uc => uc.Teacher)
+                .WithMany(c => c.TeacherCourses)
+                .HasForeignKey(uc => uc.TeacherId);
 
-        modelBuilder.Entity<User>()
-            .HasOne(u => u.University)
-            .WithMany(u => u.Users)
-            .HasForeignKey(u => u.UniversityId);
-
-        modelBuilder.Entity<Course>()
-            .HasOne(c => c.University)
-            .WithMany(u => u.Courses)
-            .HasForeignKey(c => c.UniversityId);
+            modelBuilder.Entity<User>()
+                .HasOne(u => u.University)
+                .WithMany(u => u.Users)
+                .HasForeignKey(u => u.UniversityId);
+        }
     }
-}
 }

@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccessLayer.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20231113133149_test")]
-    partial class test
+    [Migration("20231113155426_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -33,17 +33,58 @@ namespace DataAccessLayer.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("UniversityId")
+                    b.HasKey("Id");
+
+                    b.ToTable("Courses");
+                });
+
+            modelBuilder.Entity("EntityLayer.Entities.StudentCourse", b =>
+                {
+                    b.Property<int>("StudentId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CourseId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("StudentId", "CourseId");
+
+                    b.HasIndex("CourseId");
+
+                    b.ToTable("StudentCourse");
+                });
+
+            modelBuilder.Entity("EntityLayer.Entities.TeacherCourse", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CourseId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("TeacherId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UniversityId");
+                    b.HasIndex("CourseId");
 
-                    b.ToTable("Courses");
+                    b.HasIndex("TeacherId");
+
+                    b.ToTable("TeacherCourse");
                 });
 
             modelBuilder.Entity("EntityLayer.Entities.University", b =>
@@ -55,11 +96,9 @@ namespace DataAccessLayer.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Location")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -79,7 +118,6 @@ namespace DataAccessLayer.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Password")
@@ -98,30 +136,42 @@ namespace DataAccessLayer.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("EntityLayer.Entities.UserCourse", b =>
+            modelBuilder.Entity("EntityLayer.Entities.StudentCourse", b =>
                 {
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("CourseId")
-                        .HasColumnType("int");
-
-                    b.HasKey("UserId", "CourseId");
-
-                    b.HasIndex("CourseId");
-
-                    b.ToTable("UserCourse");
-                });
-
-            modelBuilder.Entity("EntityLayer.Entities.Course", b =>
-                {
-                    b.HasOne("EntityLayer.Entities.University", "University")
-                        .WithMany("Courses")
-                        .HasForeignKey("UniversityId")
+                    b.HasOne("EntityLayer.Entities.Course", "Course")
+                        .WithMany("StudentCourses")
+                        .HasForeignKey("CourseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("University");
+                    b.HasOne("EntityLayer.Entities.User", "Student")
+                        .WithMany("StudentCourses")
+                        .HasForeignKey("StudentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Course");
+
+                    b.Navigation("Student");
+                });
+
+            modelBuilder.Entity("EntityLayer.Entities.TeacherCourse", b =>
+                {
+                    b.HasOne("EntityLayer.Entities.Course", "Course")
+                        .WithMany("TeacherCourses")
+                        .HasForeignKey("CourseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("EntityLayer.Entities.User", "Teacher")
+                        .WithMany("TeacherCourses")
+                        .HasForeignKey("TeacherId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Course");
+
+                    b.Navigation("Teacher");
                 });
 
             modelBuilder.Entity("EntityLayer.Entities.User", b =>
@@ -135,40 +185,23 @@ namespace DataAccessLayer.Migrations
                     b.Navigation("University");
                 });
 
-            modelBuilder.Entity("EntityLayer.Entities.UserCourse", b =>
-                {
-                    b.HasOne("EntityLayer.Entities.Course", "Course")
-                        .WithMany("UserCourses")
-                        .HasForeignKey("CourseId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("EntityLayer.Entities.User", "User")
-                        .WithMany("UserCourses")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Course");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("EntityLayer.Entities.Course", b =>
                 {
-                    b.Navigation("UserCourses");
+                    b.Navigation("StudentCourses");
+
+                    b.Navigation("TeacherCourses");
                 });
 
             modelBuilder.Entity("EntityLayer.Entities.University", b =>
                 {
-                    b.Navigation("Courses");
-
                     b.Navigation("Users");
                 });
 
             modelBuilder.Entity("EntityLayer.Entities.User", b =>
                 {
-                    b.Navigation("UserCourses");
+                    b.Navigation("StudentCourses");
+
+                    b.Navigation("TeacherCourses");
                 });
 #pragma warning restore 612, 618
         }

@@ -10,6 +10,5 @@ namespace EntityLayer.Entities
     {
         public string Location { get; set; }
         public ICollection<User> Users { get; set; }
-        public ICollection<Course> Courses { get; set; }
     }
 }

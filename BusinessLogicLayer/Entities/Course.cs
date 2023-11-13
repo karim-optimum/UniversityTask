@@ -8,8 +8,7 @@ namespace EntityLayer.Entities
 {
     public class Course : EntityBase
     {
-        public int UniversityId { get; set; }
-        public ICollection<UserCourse> UserCourses { get; set; }
-        public University University { get; set; }
+        public ICollection<StudentCourse> StudentCourses { get; set; }
+        public ICollection<TeacherCourse> TeacherCourses { get; set; }
     }
 }
