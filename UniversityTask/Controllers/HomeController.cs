@@ -18,7 +18,7 @@ namespace UniversityTask.Controllers
             return View();
         }
 
-        public IActionResult Privacy()
+        public IActionResult Majors()
         {
             return View();
         }

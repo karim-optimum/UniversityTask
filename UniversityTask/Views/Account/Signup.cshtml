@@ -1,0 +1,40 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    ViewData["Title"] = "Sign Up";
+}
+
+<main class="form-signin w-50 m-auto">
+    <form asp-action="Signup" method="post" class="text-center">
+        <img class="mb-2" src="https://img.freepik.com/premium-vector/luxury-university-logo-design_139869-120.jpg" alt="" width="150" height="170">
+        <h1 class="h3 mb-3 fw-normal">Please Sign Up</h1>
+
+        <div class="form-floating">
+            <input type="text" class="form-control" name="name" id="floatingInput" placeholder="Your Name">
+            <label for="floatingInput">Name</label>
+        </div>
+
+        <div class="form-floating">
+            <input type="email" class="form-control" name="email" id="floatingInput" placeholder="name@example.com">
+            <label for="floatingInput">Email address</label>
+        </div>
+
+        <div class="form-floating">
+            <input type="password" class="form-control" name="password" id="floatingPassword" placeholder="Password">
+            <label for="floatingPassword">Password</label>
+        </div>
+
+        <div class="">
+            <input type="radio" value="1" name="role" id="student">
+            <label for="student">Student</label>
+        </div>
+
+        <div class="">
+            <input type="radio" value="2"  name="role" id="teacher">
+            <label for="teacher">Teacher</label>
+        </div>
+
+        <button class="btn btn-primary w-100 mt-2 py-2" type="submit">Sign Up</button>
+    </form>
+</main>

@@ -11,6 +11,7 @@ namespace DataAccessLayer.Data
         public DbSet<University> Universities { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<Course> Courses { get; set; }
+        public DbSet<UserType> UserTypes { get; set; }
     
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
