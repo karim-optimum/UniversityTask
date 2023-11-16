@@ -35,6 +35,17 @@
             <label for="teacher">Teacher</label>
         </div>
 
+        <div style="margin: auto; width: 50%;">
+        <label for="UniversityId">Select University</label>
+        <select id="UniversityId" name="UniversityId" class="form-control">
+        <option value="">-- Select --</option>
+            @for (int i = 0; i < ViewBag.Universities.Count; i++)
+            {
+            <option value="@ViewBag.Universities[i].Id">@ViewBag.Universities[i].Name</option>
+            }
+    </select>
+</div>
+
         <button class="btn btn-primary w-100 mt-2 py-2" type="submit">Sign Up</button>
     </form>
 </main>

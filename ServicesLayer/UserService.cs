@@ -20,9 +20,9 @@ namespace UniversityTask.Services
             return user != null;
         }
 
-        public async Task<bool> CreateUserAsync(string email, string password)
+        public async Task<bool> CreateUserAsync(string email, string password, int universityId)
         {
-            User existingUser =  _context.Users.FirstOrDefault(u => u.Email == email);
+            User existingUser =  await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
             if (existingUser != null)
             {
                 // User with the same email already exists
@@ -32,11 +32,12 @@ namespace UniversityTask.Services
             User newUser = new User
             {
                 Email = email,
-                Password = password
+                Password = password,
+                UniversityId = universityId
             };
 
-             _context.Users.Add(newUser);
-             _context.SaveChanges();
+             await _context.Users.AddAsync(newUser);
+             await _context.SaveChangesAsync();
 
             return true;
         }

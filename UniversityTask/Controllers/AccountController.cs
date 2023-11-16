@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using DataAccessLayer.Data;
+using EntityLayer.Entities;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using UniversityTask.Services;
 
 namespace UniversityTask.Controllers
@@ -6,10 +9,12 @@ namespace UniversityTask.Controllers
     public class AccountController : Controller
     {
         private readonly UserService _service;
+        private readonly ApplicationDbContext _context;
 
-        public AccountController(UserService service)
+        public AccountController(UserService service, ApplicationDbContext context)
         {
             _service = service;
+            _context = context;
         }
         public IActionResult Login()
         {
@@ -24,7 +29,10 @@ namespace UniversityTask.Controllers
                 ModelState.AddModelError("", "Email and password are required.");
                 return View();
             }
-            if (email == "user@example.com" && password == "123456")
+            var findingUserEmail = _context.Users.FirstOrDefault(x => x.Email == email);
+            var findingUserPasswprd = _context.Users.FirstOrDefault(x => x.Password == password);
+
+            if (findingUserEmail != null && findingUserPasswprd != null)
             {
                 return RedirectToAction("Index", "Home");
             }
@@ -35,13 +43,16 @@ namespace UniversityTask.Controllers
             }
         }
 
-        public IActionResult Signup()
+        public async Task<IActionResult> Signup()
         {
+
+            var universities = await _context.Universities.ToListAsync();
+            ViewBag.Universities = universities;
             return View();
         }
 
         [HttpPost]
-        public IActionResult Signup(string email, string password)
+        public async Task<IActionResult> Signup(string email, string password, int universityId)
         {
             if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password))
             {
@@ -55,7 +66,8 @@ namespace UniversityTask.Controllers
             }
 
             // User creation successful, redirect to login action
-            _service.CreateUserAsync(email, password);
+            
+            await _service.CreateUserAsync(email, password,universityId);
             return RedirectToAction("Login", "Account");
         }
     }
